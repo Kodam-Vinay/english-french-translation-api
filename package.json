@@ -1,0 +1,16 @@
+{
+  "name": "translation-api-twf",
+  "version": "1.0.0",
+  "description": "translation-api",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "nodemon src/main.js"
+  },
+  "author": "vinay",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2"
+  }
+}
