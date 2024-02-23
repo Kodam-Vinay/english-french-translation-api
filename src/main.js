@@ -1,10 +1,17 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { TRANSLATE_API } = require("./constants");
+const cors = require("cors");
 dotenv.config();
 const port = process.env.PORT || 8080;
 const app = express();
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.post("/translate", async (req, res) => {
   const { text } = req.body;
