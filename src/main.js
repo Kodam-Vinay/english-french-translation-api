@@ -24,22 +24,29 @@ app.post("/translate", async (req, res) => {
     const options = {
       method: "POST",
       headers: {
+        "content-type": "application/json",
         "X-RapidAPI-Key": process.env.RAPID_API_KEY,
-        "X-RapidAPI-Host": process.env.RAPID_API_HOST_GOOGLE,
+        "X-RapidAPI-Host": process.env.RAPID_API_HOST,
       },
-      body: new URLSearchParams({
-        from: "en",
-        to: "fr",
-        text,
+      body: JSON.stringify({
+        text: text,
+        source: "en",
+        target: "fr",
       }),
     };
-
     const response = await fetch(TRANSLATE_API, options);
     const data = await response.json();
-    data &&
-      res.status(200).json({
-        translation: data.trans,
+    if (Object.keys(data).length > 0) {
+      res.status(200).send({
+        translation: data?.translations?.translation,
       });
+    } else {
+      res
+        .status(500)
+        .send({
+          message: "Unable To Process The Data Please Try Again Later!",
+        });
+    }
   } catch (error) {
     res.status(500).send(error.message);
   }
