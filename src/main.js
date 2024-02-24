@@ -22,8 +22,8 @@ app.post("/translate", async (req, res) => {
     url: TRANSLATE_API,
     headers: {
       "Content-Type": "application/json",
-      "X-RapidAPI-Key": "21bd153868mshc02d65a505100b3p1e031bjsncd39968d4b1e",
-      "X-RapidAPI-Host": "translate-plus.p.rapidapi.com",
+      "X-RapidAPI-Key": process.env.RAPID_API_KEY,
+      "X-RapidAPI-Host": process.env.RAPID_API_HOST,
     },
     data: JSON.stringify({
       text: text,
@@ -37,10 +37,14 @@ app.post("/translate", async (req, res) => {
       return;
     }
     const response = await axios.request(options);
-    console.log(response?.data?.translations?.translation);
-    res.status(200).send({
-      translation: response?.data?.translations?.translation,
-    });
+    if (response?.status === 200)
+      res.status(200).send({
+        translation: response?.data?.translations?.translation,
+      });
+    else
+      res.status(500).send({
+        message: "Something Went Wrong, Please Try again Later!",
+      });
   } catch (error) {
     res.status(500).send(error.message);
   }
