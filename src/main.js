@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const axios = require("axios");
 const { TRANSLATE_API } = require("./constants");
 const cors = require("cors");
 dotenv.config();
@@ -15,36 +16,31 @@ app.use(
 
 app.post("/translate", async (req, res) => {
   const { text } = req.body;
+
+  const options = {
+    method: "POST",
+    url: TRANSLATE_API,
+    headers: {
+      "Content-Type": "application/json",
+      "X-RapidAPI-Key": "21bd153868mshc02d65a505100b3p1e031bjsncd39968d4b1e",
+      "X-RapidAPI-Host": "translate-plus.p.rapidapi.com",
+    },
+    data: JSON.stringify({
+      text: text,
+      source: "en",
+      target: "fr",
+    }),
+  };
   try {
     if (text === "") {
       res.status(400).send({ message: "Please Enter Some Text" });
       return;
     }
-
-    const options = {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": process.env.RAPID_API_KEY,
-        "X-RapidAPI-Host": process.env.RAPID_API_HOST,
-      },
-      body: JSON.stringify({
-        text: text,
-        source: "en",
-        target: "fr",
-      }),
-    };
-    const response = await fetch(TRANSLATE_API, options);
-    const data = await response.json();
-    if (Object.keys(data).length > 0) {
-      res.status(200).send({
-        translation: data?.translations?.translation,
-      });
-    } else {
-      res.status(500).send({
-        message: "Unable To Process The Data Please Try Again Later!",
-      });
-    }
+    const response = await axios.request(options);
+    console.log(response?.data?.translations?.translation);
+    res.status(200).send({
+      translation: response?.data?.translations?.translation,
+    });
   } catch (error) {
     res.status(500).send(error.message);
   }
