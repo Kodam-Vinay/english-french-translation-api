@@ -41,11 +41,9 @@ app.post("/translate", async (req, res) => {
         translation: data?.translations?.translation,
       });
     } else {
-      res
-        .status(500)
-        .send({
-          message: "Unable To Process The Data Please Try Again Later!",
-        });
+      res.status(500).send({
+        message: "Unable To Process The Data Please Try Again Later!",
+      });
     }
   } catch (error) {
     res.status(500).send(error.message);
