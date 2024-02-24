@@ -22,8 +22,8 @@ app.post("/translate", async (req, res) => {
     url: TRANSLATE_API,
     headers: {
       "content-type": "application/json",
-      "X-RapidAPI-Key": "21bd153868mshc02d65a505100b3p1e031bjsncd39968d4b1e",
-      "X-RapidAPI-Host": "translate-plus.p.rapidapi.com",
+      "X-RapidAPI-Key": process.env.RAPID_API_KEY,
+      "X-RapidAPI-Host": process.env.RAPID_API_HOST,
     },
     data: JSON.stringify({
       text: text,
